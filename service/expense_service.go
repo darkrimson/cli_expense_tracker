@@ -15,19 +15,34 @@ func NewExpenseService(r storage.ExpenseRepository) *ExpenseService {
 	return &ExpenseService{repo: r}
 }
 
-func (s *ExpenseService) AddExpense(amount float64, description, category string) (model.Expense, error) {
+func (s *ExpenseService) AddExpense(amount float64, description string) (model.Expense, error) {
 	if amount <= 0 {
 		return model.Expense{}, errors.New("amount must be greater than zero")
 	}
 
 	exp := model.Expense{
 		Description: description,
-		Category:    category,
 		Amount:      amount,
 		Date:        time.Now(),
 	}
 
 	return s.repo.Save(exp)
+}
+
+func (s *ExpenseService) UpdateExpense(id int, description string, amount float64) error {
+	exp, err := s.repo.GetByID(id)
+	if err != nil {
+		return errors.New("expense not found")
+	}
+
+	if description != "" {
+		exp.Description = description
+	}
+	if amount > 0 {
+		exp.Amount = amount
+	}
+
+	return s.repo.Update(id, exp)
 }
 
 func (s *ExpenseService) DeleteExpense(id int) error {
