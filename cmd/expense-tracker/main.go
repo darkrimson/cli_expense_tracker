@@ -23,11 +23,13 @@ func main() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	addDescription := addCmd.String("description", "", "Expense description")
 	addAmount := addCmd.Float64("amount", 0, "Expense amount")
+	addCategory := addCmd.String("category", "", "Expense category")
 
 	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
 	updateID := updateCmd.Int("id", 0, "Expense ID")
 	updateDescription := updateCmd.String("description", "", "Expense description")
 	updateAmount := updateCmd.Float64("amount", 0, "Expense amount")
+	updateCategory := updateCmd.String("category", "", "Expense category")
 
 	deleteCmd := flag.NewFlagSet("delete", flag.ExitOnError)
 	deleteID := deleteCmd.Int("id", 0, "Expense ID")
@@ -42,10 +44,11 @@ func main() {
 		addCmd.Parse(os.Args[2:])
 		expense := model.Expense{
 			Description: *addDescription,
+			Category:    *addCategory,
 			Amount:      *addAmount,
 			Date:        time.Now(),
 		}
-		savedExp, err := expenseService.AddExpense(expense.Amount, expense.Description)
+		savedExp, err := expenseService.AddExpense(expense.Amount, expense.Description, *addCategory)
 		if err != nil {
 			fmt.Println("Error: ", err)
 			return
@@ -54,7 +57,7 @@ func main() {
 
 	case "update":
 		updateCmd.Parse(os.Args[2:])
-		err := expenseService.UpdateExpense(*updateID, *updateDescription, *updateAmount)
+		err := expenseService.UpdateExpense(*updateID, *updateDescription, *updateCategory, *updateAmount)
 		if err != nil {
 			fmt.Println("Error:", err)
 			return
@@ -78,10 +81,10 @@ func main() {
 			fmt.Println("Error:", err)
 			return
 		}
-		fmt.Println("ID\tDate\t\tDescription\tAmount")
+		fmt.Println("ID\tDate\t\tDescription\tCategory\tAmount")
 
 		for _, e := range expenses {
-			fmt.Printf("%d\t%s\t%s\t$%.2f\n", e.ID, e.Date.Format("2006-01-02"), e.Description, e.Amount)
+			fmt.Printf("%d\t%s\t%s\t\t%s\t\t$%.2f\n", e.ID, e.Date.Format("2006-01-02"), e.Description, e.Category, e.Amount)
 		}
 
 	case "summary":

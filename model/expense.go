@@ -9,4 +9,5 @@ type Expense struct {
 	Date        time.Time
 	Description string
 	Amount      float64
+	Category    string
 }
