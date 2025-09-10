@@ -19,5 +19,12 @@
  "Description": "Lunch",
  "Amount": 200,
  "Category": "obed"
+ },
+ {
+ "ID": 4,
+ "Date": "2025-09-10T23:29:40.6372384+03:00",
+ "Description": "Lunch",
+ "Amount": 200,
+ "Category": "obeddd"
  }
  ]

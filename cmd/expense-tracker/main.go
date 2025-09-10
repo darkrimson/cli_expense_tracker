@@ -11,6 +11,31 @@ import (
 	"cli_expense_tracker/storage"
 )
 
+func printHelp() {
+	fmt.Println("Usage: expense-tracker <command> [options]")
+	fmt.Println("\nCommands:")
+	fmt.Println("  add       Add a new expense")
+	fmt.Println("    --description  string   Expense description")
+	fmt.Println("    --amount       float    Expense amount")
+	fmt.Println("    --category     string   Expense category")
+	fmt.Println()
+	fmt.Println("  update    Update an existing expense")
+	fmt.Println("    --id           int      Expense ID")
+	fmt.Println("    --description  string   Expense description")
+	fmt.Println("    --amount       float    Expense amount")
+	fmt.Println("    --category     string   Expense category")
+	fmt.Println()
+	fmt.Println("  delete    Delete an expense by ID")
+	fmt.Println("    --id           int      Expense ID")
+	fmt.Println()
+	fmt.Println("  list      List all expenses")
+	fmt.Println()
+	fmt.Println("  summary   Show total expenses")
+	fmt.Println("    --month        int      Month number (1-12)")
+	fmt.Println()
+	fmt.Println("  help      Show this help message")
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("Expected 'add', 'update', 'delete', 'list' or 'summary' subcommands")
@@ -40,6 +65,10 @@ func main() {
 	summaryMonth := summaryCmd.Int("month", 0, "Month number 1-12")
 
 	switch os.Args[1] {
+
+	case "help":
+		printHelp()
+
 	case "add":
 		addCmd.Parse(os.Args[2:])
 		expense := model.Expense{
@@ -107,5 +136,6 @@ func main() {
 
 	default:
 		fmt.Println("Unknown command. Expected 'add', 'update', 'delete', 'list' or 'summary'")
+		printHelp()
 	}
 }
